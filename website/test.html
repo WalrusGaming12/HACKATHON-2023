@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Random Species Information and Image Generator</title>
+  <style>
+    /* Style for the image display */
+    #speciesContainer {
+      text-align: center;
+      margin-top: 20px;
+    }
+    img {
+      max-width: 100%;
+      max-height: 400px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Random Species Information and Image Generator</h1>
+  <button id="getSpeciesButton">Get Random Species</button>
+  <div id="speciesContainer"></div>
+
+  <script>
+    document.getElementById('getSpeciesButton').addEventListener('click', function() {
+      fetch('species.json')
+        .then(response => response.json())
+        .then(data => {
+          const speciesKeys = Object.keys(data);
+          const randomSpeciesKey = speciesKeys[Math.floor(Math.random() * speciesKeys.length)];
+          const speciesInfo = data[randomSpeciesKey];
+          const baseURL= "https://www.fisheries.noaa.gov"
+          const speciesContainer = document.getElementById('speciesContainer');
+          speciesContainer.innerHTML = `
+            <h2>${randomSpeciesKey}</h2>
+            <p>${speciesInfo[2]}</p>
+            <img src="${baseURL+speciesInfo[1]}" alt="${randomSpeciesKey}">
+          `;
+        })
+        .catch(error => {
+          console.log('Error fetching data:', error);
+        });
+    });
+  </script>
+</body>
+</html>
